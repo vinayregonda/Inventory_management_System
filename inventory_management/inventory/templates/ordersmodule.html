@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+            
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                        
+                    <div class="row" >
+                        <div class="col-5">
+                            <h3>Manage Orders</h3>
+                        </div>
+                                    <!-- Button trigger modal -->
+                        <div class="col-7">
+                            <h5 class="offset-9">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                                    <i class="fa-regular fa-square-plus"></i> New Order
+                                </button>
+                            </h5>
+                        </div>
+                                        
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel1"> <i class="fa-solid fa-plus"></i>&nbsp;Add Purchase</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="" method="post">
+                                            {% csrf_token %}
+                                        <div class="modal-body">
+                                            <div class="container">
+                                                <label for="" class="form-label">Product Name</label>
+                                                <select name="pid" id="" class="form-select">
+                                                    <option value=""> select product name</option>
+                                                    {% for x in productdata %}
+                                                    <option value="{{x.pid}}" ><i class="fa-solid fa-caret-down"></i>{{x.pname}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <label for="" class="form-label">Product Quantity</label> 
+                                                <input type="phone" class="form-control" name="productquantity">
+                                                <label for="" class="form-label">Customer name</label>
+                                                <select name="id" id="" class="form-select">
+                                                    <option value=""> select customer name</option>
+                                                    {% for x in customerdata %}
+                                                    <option value="{{x.id}}" ><i class="fa-solid fa-caret-down"></i>{{x.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary"  name="add_order">ADD</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                        </div>
+                        </div>
+                        <br>
+                        <!-- <div class="row">
+                            <div class="col-3 offset-9" style="display: flex;" >
+                            <label for="" class="form-label">Search</label>&nbsp;&nbsp;
+                            <input type="search">
+                    
+                            </div> 
+                        </div> -->
+                        <br>
+                            <div class="card-body">
+                                <table class="display" id="example" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Total Item</th>
+                                        <th scope="col">Customer</th>
+                                        <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for x in orderdata %}
+                                        <tr>
+                                        <th scope="row">{{forloop.counter}}</th>
+                                        <td>{{x.product_id}}</td>
+                                        <td>{{x.total_shiped}}</td>
+                                        <td>{{x.cutomer_id}}</td>
+                                        <td>
+                                        
+                                        <!-- Button trigger modal -->
+                                            <!-- <form action="{% url 'ordersmodule' %}" method="post">
+                                                 {% csrf_token %}
+                                            <input type="hidden" name="order_id" value="{{ x.order_id }}">
+                                            <button type="submit" name="edit_order" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2{{ x.order_id }}">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                            <button type="submit" name="del_order" class="btn btn-danger">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                            </form> -->
+
+                                            
+                                            <a href="{% url 'editorder' x.order_id %}"  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal211{{forloop.counter}}">
+                                     
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+                                                <!-- <button type="submit" name="del_order" class="btn btn-danger">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button> -->
+                                                <!-- Button trigger modal -->
+
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ x.order_id }}"><i class="fa-solid fa-trash"></i></button>
+                                            </td>
+                                            
+                          <!-- delete modal start here -->
+                              <div class="modal fade" id="deleteModal{{ x.order_id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ x.order_id }}" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                              <h5 class="modal-title" id="deleteModalLabel{{ x.order_id }}"><b>Confirmation</b></h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                              Are you sure you want to delete the <br> Order ID:'<b>{{ x.order_id }}</b>'?<br> Product Name :'<b>{{x.product_id}}</b>' 
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                              <!-- Here, you can pass the customer ID or any other relevant information to your backend for deletion -->
+                                              <form action="{% url 'ordersmodule' %}" method="post">
+                                                  {% csrf_token %}
+                                                  <input type="hidden" name="order_id" value="{{ x.order_id }}">
+                                                  <button type="submit" class="btn btn-danger" name="del_order">Delete</button>
+                                              </form>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <!-- delete modal end here -->
+
+                            
+
+                                            <!-- Modal
+                                            <div class="modal fade" id="exampleModal2{{ x.order_id }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ x.order_id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel{{ x.order_id }}"> <i class="fa-solid fa-pen-to-square"></i>&nbsp;Edit Order</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form action="{% url 'ordersmodule' %}" method="post">
+                                                    <div class="modal-body">
+                                                        <div class="container">
+                                                            <label for="" class="form-label">Product Name</label>
+                                                            <select name="pid" id="" class="form-select">
+                                                                <option value=""> select product name</option>
+                                                                {% for x in productdata %}
+                                                                <option value="{{x.pid}}" ><i class="fa-solid fa-caret-down"></i>{{x.pname}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        <label for="" class="form-label">Total Item</label> 
+                                                        <input type="phone" name="edittotalquantity" class="form-control" value="{{x.total_shiped}}">
+                                                        <label for="" class="form-label">Customer Name</label>
+                                                        <select name="id" id="id" class="form-select">
+                                                            <option value=""> select customer name</option>
+                                                            {% for x in customerdata %}
+                                                            <option value="{{ x.id }}" ><i class="fa-solid fa-caret-down"></i>{{x.name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    
+                                                        <input type="hidden" name="order_id" value="{{ x.order_id }}">
+                                                        <input type="submit" name="edit_order" class="btn btn-primary" value="update">
+                                                       
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+                                                    </div>
+                                                    </form>
+                                                </div>
+                                                </div>
+                                            </div> -->
+
+                                    
+                                    </td>
+                                
+                                    </tr>
+                                    {% endfor %}
+                                
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- <div class="row">
+                                <div class="col-7">
+                                    <label for=""> showing 1 to 3 of 3 entries</label></div>
+                                
+                                    <div class="col-3 offset-2">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                            </div>
+                    </div> -->
+                
+                </div>
+
+                
+<!-- edit model start here -->
+{% for x in orderdata %}
+<div class="modal fade" id="exampleModal211{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Category</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+    <form action="{% url 'updateorder' x.order_id %}" method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+            <div class="container">
+            
+                    <label for="" class="form-label">Product Name</label>
+                    <select name="pid" id="" class="form-select">
+                        <option value=""> select product name</option>
+                        {% for x in productdata %}
+                        <option value="{{x.pid}}" ><i class="fa-solid fa-caret-down"></i>{{x.pname}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="" class="form-label">Total Item</label> 
+                    <input type="phone" name="edittotalquantity" class="form-control" value="{{x.total_shiped}}">
+                    <label for="" class="form-label">Customer Name</label>
+                    <select name="id" id="id" class="form-select">
+                        <option value=""> select customer name</option>
+                        {% for x in customerdata %}
+                        <option value="{{ x.id }}" ><i class="fa-solid fa-caret-down"></i>{{x.name}}</option>
+                        {% endfor %}
+                    </select>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </form>
+    </div>
+    </div>
+</div>
+
+{% endfor %}
+<!-- edit model end here -->
+                
+    {% endblock %}
+
+       {% block script %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+    
+    <script>
+
+      new DataTable('#example', {
+            pagingType: 'simple_numbers'
+        });
+    </script>
+   {% endblock %}
+   {% block css %}
+   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
+   {% endblock %}

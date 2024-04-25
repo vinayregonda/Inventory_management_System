@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+            {% block content %}
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                    
+                <div class="row" >
+                    <div class="col-5">
+                        <h3>Customer list</h3>
+                    </div>
+                                <!-- Button trigger modal -->
+                    <div class="col-7">
+                        <h5 class="offset-9">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <i class="fa-regular fa-square-plus"></i> New Customer
+                            </button>
+                        </h5>
+                    </div>
+                                    
+                         <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel"> <i class="fa-solid fa-plus"></i>&nbsp;Add Customer</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container">
+                                                    <form action="{% url 'customermodule' %}" method="post">
+                                                        {% csrf_token %}
+                                                                <label for="" class="form-label">Name</label>
+                                                                <input type="text" class="form-control" name="name" required>
+                                                                <label for="" class="form-label">Mobile</label>
+                                                                <input type="number" name="mobile" id="" class="form-control" required>
+                                                                <label for="" class="form-label">Balance</label>
+                                                                <input type="text" name="balance" id="" class="form-control" required>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Address</label>
+                                                                    <textarea class="form-control" name="address" id="" rows="3" required></textarea>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                            <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" name="add_customer" class="btn btn-primary">Save</button>
+                                                        </div>
+                                                    </form>
+                                        </div>
+                                        </div>
+                                    </div>
+                </div>
+                </div>
+                <br>
+                <!-- <div class="row">
+                    <div class="col-3 offset-9" style="display: flex;" >
+                    <form action="{% url 'customermodule' %}" method="get">
+                    <label for="" class="form-label" type="submit">Search</label>&nbsp;&nbsp;
+                    <input type="search" name="search" placeholder="search by name"></form>
+            
+                    </div> 
+                </div> -->
+                <br>
+                    <div class="card-body">
+                        {% if data %}
+                        <table  id="example" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                  <th scope="col">ID</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Address</th>
+                                  <th scope="col">Mobile</th>
+                                  <th scope="col">Balance</th>
+                                  <th scope="col">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for x in data %}
+                                <tr>
+                                  <th scope="row">{{ forloop.counter}}</th>
+                                  <td>{{ x.name }}</td>
+                                  <td>{{ x.address }}</td>
+                                  <td>{{ x.mobile }}</td>
+                                  <td>{{ x.balance }}</td>
+                                  <form action="{% url 'customermodule' %}" method="post">
+                                    {% csrf_token %}
+                                  <td>
+                                    <!-- <form action="{% url 'productmodule' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pid" value="{{ x.pid }}">
+                                            <button type="submit" class="btn btn-danger" name="del_product"><i class="fa-solid fa-trash"></i></button>
+                                                  
+                                                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ x.pid }}">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </button>
+                                        </form>
+                                     -->
+                                    <input type="hidden" name="id" value="{{ x.id }}">
+                                   
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ x.id }}"> <i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ x.id }}"><i class="fa-solid fa-trash"></i></button>
+                            
+                      
+                          <!--  start Edit Modal -->
+                                                    <div class="modal fade" id="editModal{{ x.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ x.id }}" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="editModalLabel{{ x.id }}"><i class="fa-regular fa-square-plus"></i>Edit Customer</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <form action="{% url 'customermodule' %}" method="post">
+                                                                    {% csrf_token %}
+                                                                    <div class="modal-body">
+                                                                        <input type="hidden" name="id" value="{{ x.id }}">
+                                                                        <label for="name">Name</label>
+                                                                        <input type="text" class="form-control" id="name" name="name" value="{{ x.name }}">
+                                                                        <label for="mobile">Mobile</label>
+                                                                        <input type="number" class="form-control" id="mobile" name="mobile" value="{{ x.mobile }}">
+                                                                        <label for="balance">Balance</label>
+                                                                        <input type="text" class="form-control" id="balance" name="balance" value="{{ x.balance }}">
+                                                                        <label for="address">Address</label>
+                                                                        <textarea class="form-control" id="address" name="address">{{ x.address }}</textarea>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-primary" name="submit_edit">Update</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                            <!-- End Edit Modal -->
+
+                                            <!-- delete modal start here -->
+                                                <div class="modal fade" id="deleteModal{{ x.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ x.id }}" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="deleteModalLabel{{ x.id }}"><b>Confirmation</b></h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Are you sure you want to delete the customer name:'<b>{{ x.name }}</b>'?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                <!-- Here, you can pass the customer ID or any other relevant information to your backend for deletion -->
+                                                                <form action="{% url 'customermodule' %}" method="post">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" name="id" value="{{ x.id }}">
+                                                                    <button type="submit" class="btn btn-danger" name="del_customer">Delete</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- delete modal end here -->
+                                                        
+
+
+                                  </td>
+                                  </form>
+                                </tr>
+                                {% endfor %}
+                              </tbody>
+                          </table>
+                          {% else %}
+                          <h5>Empty Data</h5>
+                          {% endif %}
+                    </div>
+                    <!-- <div class="row">
+                            <div class="col-7">
+                                <label for=""> showing 1 to 3 of 3 entries</label></div>
+                            
+                                <div class="col-3 offset-2">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                        </ul>
+                                      </nav>
+                                </div>
+                        </div>
+                </div> -->
+               
+
+
+
+
+            {% endblock %}
+            {% block script %}
+            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.min.css">
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+            <script src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+            
+            <script>
+        
+              new DataTable('#example', {
+                    pagingType: 'simple_numbers'
+                });
+            </script>
+           {% endblock %}
+           {% block css %}
+           <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
+           {% endblock %}

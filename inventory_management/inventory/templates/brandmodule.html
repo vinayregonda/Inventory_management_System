@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+        <div class="row">
+            <div class="card">
+                <div class="card-header">
+                
+            <div class="row" >
+                <div class="col-5">
+                    <h3>Brand list</h3>
+                </div>
+                            <!-- Button trigger modal -->
+                <div class="col-7">
+                    <h5 class="offset-9">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <i class="fa-regular fa-square-plus"></i> New Brand
+                        </button>
+                    </h5>
+                </div>
+                                
+                        <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel"> <i class="fa-solid fa-plus"></i>&nbsp;Add Brand</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form action="{% url 'brandmodule'  %}" method="post">
+                                                {% csrf_token %}
+                                            <div class="modal-body">
+                                                <div class="container">
+                                                    <select name="categoryid" id="" class="form-select" required>
+                                                        <option value="" ><i class="fa-solid fa-caret-down"></i>Select category no</option>
+                                                        {% for x in data1 %}
+                                                        <option value="{{x.categoryid}}"  ><i class="fa-solid fa-caret-down"></i>{{x.categoryid}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <br>
+                                                    <label for="" class="form-label">Enter Brand Name</label>
+                                                    <input type="text" class="form-control" placeholder="brand" name="brandname" required> 
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary"  name="add_brand">Add</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                </div>
+                         </div>
+                </div>
+                </div>
+                <br>
+                <!-- <div class="row">
+                    <div class="col-3 offset-9" style="display: flex;" >
+                    <label for="" class="form-label">Search</label>&nbsp;&nbsp;
+                    <input type="search">
+            
+                    </div> 
+                </div> -->
+                <br>
+                    <div class="card-body">
+                        <table  id="example" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Brand Name</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for x in data2 %}
+                                <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{x.categoryid.categoryid}}</td>
+                                <td>{{x.bname}}</td>
+                                <td>
+                                    {% if x.status %}
+                                    Active
+                                    {% else %}
+                                    inactive
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <!-- <form action="{% url 'productmodule' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pid" value="{{ x.pid }}">
+                                            <button type="submit" class="btn btn-danger" name="del_product"><i class="fa-solid fa-trash"></i></button>
+                                                  
+                                                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ x.pid }}">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </button>
+                                        </form>
+                                     -->
+                                
+                                        <!-- Button trigger modal -->
+                                        <form action="{% url 'brandmodule' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="id" value="{{ x.id }}">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ x.id }}"> <i class="fa-solid fa-pen-to-square"></i></button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ x.id }}"> <i class="fa-solid fa-trash"></i></button>
+                                            
+                                           
+                                        </form>
+                                      
+                                                      <!-- delete modal start here -->
+                                                      <div class="modal fade" id="deleteModal{{ x.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ x.id }}" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="deleteModalLabel{{ x.id }}"><b>Confirmation</b></h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Are you sure you want to delete <br>
+                                                                     Category id:'<b>{{ x.id }}</b>'?<br>
+                                                                     Brand Name:'<b>{{ x.bname }}</b>'?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <!-- Here, you can pass the customer ID or any other relevant information to your backend for deletion -->
+                                                                    <form action="{% url 'brandmodule' %}" method="post">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="id" value="{{ x.id }}">
+                                                                        <button type="submit" class="btn btn-danger" name="delete_brand">Delete</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- delete modal end here -->
+
+                                    
+                                  
+
+                                   <!-- Edit Modal -->
+                                        <div class="modal fade" id="editModal{{ x.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ x.id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalLabel{{ x.id }}">Edit Brand</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form action="{% url 'brandmodule' %}" method="post">
+                                                        {% csrf_token %}
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="id" value="{{ x.id }}">
+                                                            <!-- Category Dropdown -->
+                                                            <label for="categoryid">Category</label>
+                                                            <select name="categoryid" id="categoryid" class="form-select">
+                                                                {% for category in data1 %}
+                                                                <option value="{{category.categoryid}}" {% if category.categoryid == x.categoryid.categoryid %} selected {% endif %}>Category &nbsp;{{ category.categoryid }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            <!-- Brand Name Input -->
+                                                            <label for="brandname">Brand Name</label>
+                                                            <input type="text" class="form-control" id="brandname" name="brandname" value="{{ x.bname }}">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                           
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary" name="edit_brand">Save</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                            
+                              </td>
+                         
+                            </tr>
+                            {% endfor %}
+                        
+                           
+                          </tbody>
+                      </table>
+                </div>
+                <!-- <div class="row">
+                        <div class="col-7">
+                            <label for=""> showing 1 to 3 of 3 entries</label></div>
+                        
+                            <div class="col-3 offset-2">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                    </ul>
+                                  </nav>
+                            </div>
+                    </div>
+            </div> -->
+           
+        </div>
+        
+
+    {% endblock %}
+    {% block script %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+    
+    <script>
+
+      new DataTable('#example', {
+            pagingType: 'simple_numbers'
+        });
+    </script>
+   {% endblock %}
+
+   {% block css %}
+   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
+   {% endblock %}

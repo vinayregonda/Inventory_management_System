@@ -1,0 +1,296 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                    
+                <div class="row" >
+                    <div class="col-5">
+                        <h3>Product list</h3>
+                    </div>
+                                <!-- Button trigger modal -->
+                    <div class="col-7">
+                        <h5 class="offset-9">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <i class="fa-regular fa-square-plus"></i> Add Product
+                            </button>
+                        </h5>
+                    </div>
+                                    
+                            <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"> <i class="fa-solid fa-plus"></i>&nbsp;Add Product</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{% url 'productmodule' %}" method="post">
+                                                    {% csrf_token %}
+                                                <div class="modal-body">
+                                                    <div class="container">
+                                                        <label for="" class="form-label">Select Category</label>
+                                                        <select name="categoryid" id="" class="form-select" required>
+                                                            <option value="">select category one</option>
+                                                            {% for x in data2 %}
+                                                            <option value="{{x.categoryid}}" ><i class="fa-solid fa-caret-down"></i>category &nbsp;{{x.categoryid}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <label for="" class="form-label">Select Brand</label>
+                                                        <select name="id" id="" class="form-select" required>
+                                                            <option value="">select brand one</option>
+                                                            {% for x in data3 %}
+                                                            <option value="{{x.id}}" ><i class="fa-solid fa-caret-down"></i> brand &nbsp;{{x.id}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <label for="" class="form-label">Product Name</label>
+                                                        <input type="text"  class="form-control" name="productname" required>
+                                                        <label for="" class="form-label">Product Model</label>
+                                                        <input type="text" class="form-control"name='productmodel' required>
+                                                        <label for="" class="form-label">Product Description</label>
+                                                        <textarea name="productdescription" id="" class="form-control" required></textarea>
+                                                        <label for="" class="form-label">Product Quantity</label>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <input type="text" class="form-control" name="productquality" required>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select name="" id="" class="form-select" required>
+                                                                    <option value="">Box</option>
+                                                                    <option value="">Container</option>
+                                                                    <option value="">Wrap</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <label for="" class="form-label">Product Base Price</label>
+                                                        <input type="text" class="form-control" name="productbaseprice" required>
+                                                        <label for="" class="form-label">Product Tax(%)</label>
+                                                        <input type="text" class="form-control" name="producttax" required>
+                                                        <label for="" class="form-label">Supplier</label>
+                                                        <select name="supplierid" id="" class="form-select"required>
+                                                            <option value="">select supplier one</option>
+                                                            {% for x in data4 %}
+                                                            <option value="{{x.supplierid}}" ><i class="fa-solid fa-caret-down"></i>Supplier &nbsp;{{x.supplierid}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                 
+                                                    <button type="submit" name="add_product" class="btn btn-primary">Add</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                            </div>
+                                        </div>
+                    </div>
+                    </div>
+                    <br>
+                    <!-- <div class="row">
+                        <div class="col-3 offset-9" style="display: flex;" >
+                        <label for="" class="form-label">Search</label>&nbsp;&nbsp;
+                        <input type="search">
+                
+                        </div> 
+                    </div> -->
+                    <br>
+                        <div class="card-body">
+                            <table  id="example" class="display"  style="width: 100%;" >
+                                <thead>
+                                    <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Company</th>
+                                    <th scope="col">Brand Name</th>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Product Model</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Supplier Name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col" style="width: 150px !important;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  {% for x in data1 %}
+                                    <tr>
+                                    <th>{{forloop.counter}}</th>
+                                    <td>{{x.categoryid}}</td>
+                                    <td>{{x.brandid}}</td>
+                                    <td>{{x.pname}}</td>
+                                    <td>{{x.model}}</td>
+                                    <td>{{x.quantity}}</td>
+                                    <td>{{x.supplier}}</td>
+                                    <td>
+                                        {% if x.status %}
+                                        Active
+                                        {% else %}
+                                        Inactive
+                                        {% endif %}
+                                    </td>
+                                    
+                                    <td class="d-flex justify-content-center">
+                                        <form action="{% url 'productmodule' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pid" value="{{ x.pid }}">
+                                            <!-- <button type="submit" class="btn btn-danger" name="del_product"><i class="fa-solid fa-trash"></i></button> -->
+                                                   <!-- Button trigger modal -->
+                                                  <!-- Button trigger modal for Edit -->
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ x.pid }}">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ x.pid }}"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
+
+                                        </td>
+                                    
+                                
+                                      <!-- Modal for Edit -->
+                                        <div class="modal fade" id="editModal{{ x.pid }}" tabindex="-1" aria-labelledby="editModalLabel{{ x.pid }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="editModalLabel{{ x.pid }}">Edit Product</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form action="{% url 'productmodule' %}" method="post">
+                                                        {% csrf_token %}
+                                                        <div class="modal-body">
+                                                            <div class="container">
+                                                                <label for="" class="form-label">Select Category</label>
+                                                                <select name="category_id" id="categoryid" class="form-select">
+                                                                 
+                                                                    {% for x in data2 %}
+                                                                    
+                                                                    <option value="{{x.categoryid}}" {% if x.categoryid == x.categoryid %} selected {% endif %} ><i class="fa-solid fa-caret-down"></i> category &nbsp;{{x.categoryid}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                                <label for="" class="form-label">Select Brand</label>
+                                                                <select name="id" id="" class="form-select">
+                                                                    
+                                                                    {% for x in data3 %}
+                                                                    <option value="{{x.id}}"  {% if x.id == x.id %} selected{% endif %}><i class="fa-solid fa-caret-down"></i>brand &nbsp; {{x.id}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                                <label for="" class="form-label">Product Name</label>
+                                                                <input type="text"  class="form-control" name="productname"  value="{{x.pname}}">
+                                                                <label for="" class="form-label">Product Model</label>
+                                                                <input type="text" class="form-control"name='productmodel' value="{{x.model}}">
+                                                                <label for="" class="form-label">Product Description</label>
+                                                                <textarea name="productdescription" id="" class="form-control">{{x.description}}</textarea>
+                                                                <label for="" class="form-label">Product Quantity</label>
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <input type="text" class="form-control" name="productquality" value="{{x.quantity}}">
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <select name="categoryid" id="" class="form-select">
+                                                                          <option value="">Box</option>
+                                                                          <option value="">Container</option>
+                                                                          <option value="">Wrap</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <label for="" class="form-label">Product Base Price</label>
+                                                                <input type="text" class="form-control" name="productbaseprice" value="{{x.base_price}}">
+                                                                <label for="" class="form-label">Product Tax(%)</label>
+                                                                <input type="text" class="form-control" name="producttax"value="{{x.tax}}">
+                                                                <label for="" class="form-label">Supplier</label>
+                                                                <select name="supplierid" id="" class="form-select">
+                                                                    
+                                                                    {% for x in data4 %}
+                                                                    <option value="{{x.supplierid}}" {% if x.supplierid == x.supplierid %} selected {% endif %} ><i class="fa-solid fa-caret-down"></i>supplier &nbsp;{{x.supplierid}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input type="hidden" name="pid" value="{{ x.pid }}">
+                                                            <input type="submit" name="edit_product" class="btn btn-primary" value="update">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- modal for Edit end here -->
+
+                                                     
+                                 
+                         
+                                
+              <!-- delete modal start here -->
+                  <div class="modal fade" id="deleteModal{{ x.pid }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ x.pid }}" aria-hidden="true">
+                      <div class="modal-dialog">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h5 class="modal-title" id="deleteModalLabel{{ x.pid }}"><b>Confirmation</b></h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                  Are you sure you want to delete the <br> Product ID:'<b>{{ x.pid }}</b>'?<br> Product Name:'<b>{{x.pname}}</b>'?
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                  <!-- Here, you can pass the customer ID or any other relevant information to your backend for deletion -->
+                                  <form action="{% url 'productmodule' %}" method="post">
+                                      {% csrf_token %}
+                                      <input type="hidden" name="pid" value="{{ x.pid }}">
+                                      <button type="submit" class="btn btn-danger" name="del_product">Delete</button>
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- delete modal end here -->
+                                
+                                 
+                        
+                                </tr>
+                                {% endfor %}
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- <div class="row">
+                            <div class="col-7">
+                                <label for=""> showing 1 to 3 of 3 entries</label></div>
+                            
+                                <div class="col-3 offset-2">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                        </div>
+                </div> -->
+            
+            </div>
+    
+   
+
+
+    {% endblock %}
+
+
+    
+    {% block script %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+    
+    <script>
+
+      new DataTable('#example', {
+            pagingType: 'simple_numbers'
+        });
+    </script>
+   {% endblock %}
+   {% block css %}
+   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
+   {% endblock %}

@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+        {% block content %}
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                    
+                <div class="row" >
+                    <div class="col-5">
+                        <h3>Category list</h3>
+                    </div>
+                                <!-- Button trigger modal -->
+                    <div class="col-7">
+                        <h5 class="offset-9">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <i class="fa-regular fa-square-plus"></i> New Category
+                            </button>
+                        </h5>
+                    </div>
+                                    
+                            <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"> <i class="fa-solid fa-plus"></i>&nbsp;Add Category</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{% url 'categorymodule' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                        <div class="container">
+                                                            
+                                                            <label for="" class="form-label">Category Name</label>
+                                                            <input type="text" class="form-control" name="categoryname" required> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <input type="submit" class="btn btn-primary" value="Add">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            </div>
+                                        </div>
+                    </div>
+                    </div>
+                    <br>
+                    <!-- <div class="row">
+                        <div class="col-3 offset-9" style="display: flex;" >
+                        <label for="" class="form-label">Search</label>&nbsp;&nbsp;
+                        <input type="search">
+                
+                        </div> 
+                    </div> -->
+                    <br>
+                        <div class="card-body">
+                            <table  id="example" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Category Name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for x in categorydata %}
+                                    <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td>{{x.c_name}}</td>
+                                    <td> {% if x.status %}
+                                        active
+                                        {% else %}
+                                        inactive
+                                        {% endif %}</td>
+                                   
+                                    
+                                            <!-- Button trigger modal -->
+                                      
+                                        
+                                        <!-- Modal -->
+                                    
+                                
+                                
+                                  <td>
+                                    <a href="{% url 'editcategory' x.categoryid %}"  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal211{{forloop.counter}}">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+
+                                  
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ x.categoryid }}"><i class="fa-solid fa-trash"></i></button>
+                                  </td>
+                                  
+                <!-- delete modal start here -->
+                    <div class="modal fade" id="deleteModal{{ x.categoryid }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ x.categoryid }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel{{ x.id }}"><b>Confirmation</b></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete the Category name:'<b>{{ x.c_name }}</b>'?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <!-- Here, you can pass the customer ID or any other relevant information to your backend for deletion -->
+                                    <form action="{% url 'deletecategory' x.categoryid %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ x.categoryid }}">
+                                        <button type="submit" class="btn btn-danger" name="del_customer">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- delete modal end here -->
+                             
+                                </tr>
+                                {% endfor %}
+  
+                               
+                              </tbody>
+                          </table>
+                    </div>
+                    <!-- <div class="row">
+                            <div class="col-7">
+                                <label for=""> showing 1 to 3 of 3 entries</label></div>
+                            
+                                <div class="col-3 offset-2">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                        </ul>
+                                      </nav>
+                                </div>
+                        </div>
+                </div> -->
+               
+            </div>
+            
+
+<!-- edit model start here -->
+{% for x in categorydata %}
+<div class="modal fade" id="exampleModal211{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Category</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+    <form action="{% url 'updatecategory' x.categoryid %}" method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+        <label for="" class="form-label">Category Name</label>
+        <input type="text" class="form-control"  name="editcategoryname" value="{{x.c_name}}">
+        </div>
+        <div class="modal-footer">  
+            
+        <button type="submit" class="btn btn-primary" >Update</button>
+        <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
+        </div>
+    </form>
+    </div>
+    </div>
+</div>
+
+{% endfor %}
+<!-- edit model end here -->
+                          
+        {% endblock %}
+        {% block script %}
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.min.css">
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+        
+        <script>
+    
+          new DataTable('#example', {
+                pagingType: 'simple_numbers'
+            });
+        </script>
+       {% endblock %}
+       {% block css %}
+       <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
+       {% endblock %}
